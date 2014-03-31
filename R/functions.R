@@ -5,7 +5,7 @@ FuncDesc <- function(ref, name, args, body, is.global) {
 }
 
 FindFunctions <- function(expr, threshold=0) {
-  Ffunc <- function(args, body, res, ref, global, assign.name) {
+  Ffunc <- function(args, body, ref, res, global, assign.name) {
     func <- FuncDesc(ref, assign.name, args, body, global)
     if (MatchThreshold(func$body, threshold)) {
       c(list(func), res)
@@ -24,7 +24,7 @@ FindFunctions <- function(expr, threshold=0) {
 
 FindFunctionsHash <- function(expr, threshold=0, algo="sha1") {
   h <- hash()
-  Ffunc <- function(args, body, res, ref, global, assign.name) {
+  Ffunc <- function(args, body, ref, res, global, assign.name) {
     func <- FuncDesc(ref, assign.name, args, body, global)
     res <- digest(res, algo)
     if (MatchThreshold(func$body, threshold)) {
