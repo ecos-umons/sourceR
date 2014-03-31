@@ -35,7 +35,7 @@ FindFunctionsHash <- function(expr, threshold=0, algo="sha1") {
   Fassign <- function(name, value, res, ...) digest(list(name, res), algo)
   Fcall <- function(name, args, res, ...) digest(list(name, res), algo)
   Fleaf <- function(value, ...) digest(value, algo)
-  VisitExpression(expr, list(Ffunc=Ffunc, Fassign=Fassign,
-                             Fcall=Fcall, Fleaf=Fleaf))
+  VisitExpressions(expr, list(Ffunc=Ffunc, Fassign=Fassign,
+                              Fcall=Fcall, Fleaf=Fleaf))
   h
 }
