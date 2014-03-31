@@ -42,7 +42,8 @@ VisitExpressions(expr, FUNC, global=FALSE, assign.name=NA)
   \code{VisitExpressions} on childs (either function body, assignment
   value or argument expressions).
 
-  All functions have optional arguments \code{global} and
+  All functions have optional arguments \code{ref} which is a
+  \code{srcref} of the function. Also there are \code{global} and
   \code{assign.name} which are the same as for \code{VisitExpressions}.
 }
 
