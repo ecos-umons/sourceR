@@ -11,8 +11,12 @@ VisitExpression <- function(e, FUNC, global=FALSE, assign.name=NA) {
                    global=global, assign.name=assign.name)
     } else {
       args <- as.list(e)[2:length(e)]
-      FUNC$Fcall(name=name, args=args, res=lapply(args, VisitExpression, FUNC),
-                 global=global, assign.name=assign.name)
+      if (name == "{" & length(args) == 1) {
+      } else {
+        FUNC$Fcall(name=name, args=args,
+                   res=lapply(args, VisitExpression, FUNC),
+                   global=global, assign.name=assign.name)
+      }
     }
   } else {
     FUNC$Fleaf(value=e, global=global, assign.name=assign.name)
