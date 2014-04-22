@@ -23,26 +23,18 @@ Maintainer: Maëlick Claes <himself@maelick.net>
 \keyword{copypaste}
 \keyword{detection}
 
-% \examples{
-% \dontrun{
-% library(CloneR)
-
-% FetchAll("data")
-% ExtractAll("data")
-
-
-% dbuser <- "user"
-% dbpass <- "password"
-% dbname <- "rdata"
-
-% con <- dbConnect(MySQL(), user=dbuser, password=dbpass, dbname=dbname)
-% dbClearResult(dbSendQuery(con, "SET NAMES utf8"))
-% dbClearResult(dbSendQuery(con, "SET collation_connection=utf8_bin"))
-% dbClearResult(dbSendQuery(con, "SET collation_server=utf8_bin"))
-
-% rdata <- LoadRData("data/rds")
-
-% InsertAll(con, rdata)
-% ExtractInsertTaskViews(con)
-% }
-% }
+\examples{
+code <- "f1 <- function(x) x + 1
+f2 <- function(x, y) {
+  x + y
+}
+f3 <- function(x, y) {
+  function(x) x + y
+}
+f4 <- function(x) {
+  f <- function(y) y - 1
+  x * f(x) / 2
+}"
+clones.list <- FindFunctions(parse(text=code, keep.source=TRUE))
+clones.hash <- FindFunctionsHash(parse(text=code, keep.source=TRUE))
+}
