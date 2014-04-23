@@ -2,3 +2,5 @@ importFrom(digest, digest)
 
 export(VisitExpressions)
 export(FindFunctions)
+export(ParsePackage)
+export(FindClones)
