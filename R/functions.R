@@ -4,7 +4,7 @@ FuncDesc <- function(ref, name, args, body, is.global) {
   res
 }
 
-FindFunctions <- function(expr, threshold=0) {
+FindFunctionsList <- function(expr, threshold=0) {
   Ffunc <- function(args, body, ref, res, global, assign.name) {
     func <- FuncDesc(ref, assign.name, args, body, global)
     if (MatchThreshold(func$body, threshold)) {
@@ -38,4 +38,12 @@ FindFunctionsHash <- function(expr, threshold=0, algo="sha1") {
   VisitExpressions(expr, list(Ffunc=Ffunc, Fassign=Fassign,
                               Fcall=Fcall, Fleaf=Fleaf))
   h
+}
+
+FindFunctions <- function(expr, threshold=0, algo="sha1", return.hash=FALSE) {
+  if (return.hash) {
+    FindFunctionsHash(expr, threshold, algo)
+  } else {
+    FindFunctionsList(expr, threshold)
+  }
 }

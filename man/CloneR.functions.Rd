@@ -1,6 +1,5 @@
 \name{FindFunctions}
 \alias{FindFunctions}
-\alias{FindFunctionsHash}
 \encoding{UTF-8}
 \title{FindFunctions}
 \description{
@@ -8,22 +7,19 @@
 }
 
 \usage{
-FindFunctions(expr, threshold=0)
-FindFunctionsHash(expr, threshold=0, algo="sha1")
+FindFunctions(expr, threshold=0, algo="sha1", return.hash=FALSE)
 }
 \arguments{
   \item{expr}{R expression object.}
   \item{threshold}{Minimum number of lines needed for the expression to
     be extracted.}
   \item{algo}{Hash algorithm to use.}
+  \item{return.hash}{If TRUE returns a hash rather than a list.}
 }
 \details{
-  \code{FindFunctions} returns a list containing description of all
-  functions with a minimum of \code{threshold} lines.
-
-  \code{FindFunctionsHash} rather returns a hash table where keys are
-  the result of a hash (default sha1) of the function body and values
-  are list of function descriptions.
+  \code{FindFunctions} returns a list or a hash containing the
+  description of all functions found in \code{expr} with a minimum of
+  \code{threshold} lines.
 }
 
 \author{

@@ -1,4 +1,4 @@
 importFrom(digest, digest)
 
 export(VisitExpressions)
-export(FindFunctions, FindFunctionsHash)
+export(FindFunctions)
