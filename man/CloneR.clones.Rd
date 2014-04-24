@@ -1,5 +1,6 @@
 \name{FindClones}
 \alias{FindClones}
+\alias{FindClonesFromHashes}
 \encoding{UTF-8}
 \title{FindClones}
 \description{
@@ -7,17 +8,21 @@
 }
 
 \usage{
-  FindClones(expr1, expr2, threshold=0, algo="sha1")
+  FindClonesFromHashes(hashes)
+  FindClones(exprs, threshold=0, algo="sha1")
 }
 \arguments{
-  \item{expr1}{First R expression object.}
-  \item{expr2}{Second R expression object.}
+  \item{hashes}{List of }
+  \item{exprs}{List of R expression objects.}
   \item{threshold}{Minimum number of lines needed for the expression to
     be extracted.}
   \item{algo}{Hash algorithm to use.}
 }
 \details{
-  Returns the clones in \code{expr1} and \code{expr2}
+  \code{FindClonesFromHashes} returns the clones found in all
+  \code{hashes}.
+
+  \code{FindClones} returns the clones found in all \code{exprs}.
 }
 
 \author{

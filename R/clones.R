@@ -1,6 +1,14 @@
-FindClones <- function(expr1, expr2, threshold=0, algo="sha1") {
-  res <- list(expr1=FindFunctionsHash(expr1, threshold, algo),
-              expr2=FindFunctionsHash(expr2, threshold, algo))
-  res$clones <- intersect(names(res$expr1), res$expr2)
-  res
+FindClonesFromHashes <- function(hashes) {
+  clones <- unlist(hashes)
+  ids <- lapply(names(hashes), function(x) rep(x, length(hashes[[x]])))
+  res <- split(clones, unlist(ids))
+  res[sapply(res, length) > 1]
+}
+
+FindClones <- function(exprs, threshold=0, algo="sha1") {
+  hashes <- lapply(exprs, FindFunctionsHash, threshold, algo)
+  if (is.null(names(hashes))) {
+    names(hashes) <- 1:length(hashes)
+  }
+  list(hashes=hashes, clones=FindClonesFromHashes(lapply(hashes, names)))
 }
