@@ -1,7 +1,7 @@
 FindClonesFromHashes <- function(hashes) {
   clones <- unlist(hashes)
   ids <- lapply(names(hashes), function(x) rep(x, length(hashes[[x]])))
-  res <- split(clones, unlist(ids))
+  res <- split(unlist(ids), clones)
   res[sapply(res, length) > 1]
 }
 
