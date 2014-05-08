@@ -36,12 +36,13 @@ FindFunctionsHash <- function(expr, threshold=0, algo="sha1") {
   Fcall <- function(name, args, res, ...) digest(list(name, res), algo)
   Fleaf <- function(value, ...) digest(value, algo)
   VisitExpressions(expr, list(Ffunc=Ffunc, Fassign=Fassign,
-                              Fcall=Fcall, Fleaf=Fleaf))
+                              Fcall=Fcall, Fleaf=Fleaf),
+                   global=TRUE)
   h
 }
 
-FindFunctions <- function(expr, threshold=0, algo="sha1", return.hash=FALSE) {
-  if (return.hash) {
+FindFunctions <- function(expr, threshold=0, algo="sha1", use.hash=FALSE) {
+  if (use.hash) {
     FindFunctionsHash(expr, threshold, algo)
   } else {
     FindFunctionsList(expr, threshold)

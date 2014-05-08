@@ -7,14 +7,14 @@
 }
 
 \usage{
-FindFunctions(expr, threshold=0, algo="sha1", return.hash=FALSE)
+FindFunctions(expr, threshold=0, algo="sha1", use.hash=FALSE)
 }
 \arguments{
   \item{expr}{R expression object.}
   \item{threshold}{Minimum number of lines needed for the expression to
     be extracted.}
   \item{algo}{Hash algorithm to use.}
-  \item{return.hash}{If TRUE returns a hash rather than a list.}
+  \item{use.hash}{If TRUE returns a hash rather than a list.}
 }
 \details{
   \code{FindFunctions} returns a list or a hash containing the

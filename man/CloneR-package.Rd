@@ -35,5 +35,5 @@ f4 <- function(x) {
   f <- function(y) y - 1
   x * f(x) / 2
 }"
-clones <- FindFunctions(parse(text=code, keep.source=TRUE), return.hash=TRUE)
+clones <- FindFunctions(parse(text=code, keep.source=TRUE), use.hash=TRUE)
 }
