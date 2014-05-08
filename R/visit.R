@@ -5,7 +5,7 @@ VisitExpression <- function(e, FUNC, global=FALSE, assign.name=NA) {
       FUNC$Ffunc(args=e[[2]], body=e[[3]], ref=getSrcref(e[[4]]),
                  res=VisitExpression(e[[3]], FUNC),
                  global=global, assign.name=assign.name)
-    } else if (name %in% c("=", "<-")) {
+    } else if (name == "<-" | name == "=") {
       FUNC$Fassign(name=e[[2]], value=e[[3]],
                    res=VisitExpression(e[[3]], FUNC, global, e[[2]]),
                    global=global, assign.name=assign.name)
