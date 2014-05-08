@@ -12,7 +12,8 @@
   FindClones(exprs, threshold=0, algo="sha1")
 }
 \arguments{
-  \item{hashes}{List of }
+  \item{hashes}{List of hashes containing functions like the one
+    returned by FindFunctions.}
   \item{exprs}{List of R expression objects.}
   \item{threshold}{Minimum number of lines needed for the expression to
     be extracted.}
