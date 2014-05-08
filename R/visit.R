@@ -2,7 +2,8 @@ VisitExpression <- function(e, FUNC, global=FALSE, assign.name=NA) {
   if (length(e) > 1) {
     name <- e[[1]]
     if (name == "function") {
-      FUNC$Ffunc(args=e[[2]], body=e[[3]], ref=getSrcref(e[[4]]),
+      body <- as.character(as.expression(e[[3]]))
+      FUNC$Ffunc(args=e[[2]], body=body, ref=getSrcref(e[[4]]),
                  res=VisitExpression(e[[3]], FUNC),
                  global=global, assign.name=assign.name)
     } else if (name == "<-" | name == "=") {
