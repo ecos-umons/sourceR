@@ -1,6 +1,9 @@
 FuncDesc <- function(ref, name, args, body, is.global, size=NA) {
-  res <- list(ref=ref, name=name, args=args, body=body, is.global=is.global,
-              size=size)
+  file <- get("filename", attr(ref, "srcfile"))
+  begin <- ref[1:2]
+  end <- ref[3:4]
+  res <- list(file=file, begin=begin, end=end, name=name, args=args,
+              body=body, is.global=is.global, size=size)
   class(res) <- "FuncDesc"
   res
 }
