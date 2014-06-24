@@ -1,14 +1,14 @@
-\name{CloneR-package}
-\alias{CloneR-package}
-\alias{CloneR}
+\name{cloneR-package}
+\alias{cloneR-package}
+\alias{cloneR}
 \docType{package}
 \title{CRAN packages metadata extractor}
 \description{
-  CloneR can be used to detect clones (similar chunks of code).
+  cloneR can be used to detect clones (similar chunks of code).
 }
 
 \details{
-  CloneR consist of functions to visit R expressions objects and find
+  cloneR consist of functions to visit R expressions objects and find
   functions similar functions in them.
 }
 

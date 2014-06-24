@@ -1,4 +1,4 @@
-CloneR
+cloneR
 ======
 
 Clone detection for R

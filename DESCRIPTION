@@ -1,11 +1,11 @@
-Package: CloneR
+Package: cloneR
 Type: Package
 Title: R code clone detection
 Version: 1.0
 Date: 2013-08-21
 Author: Maëlick Claes <himself@maelick.net>
 Maintainer: Maëlick Claes <himself@maelick.net>
-Description: CloneR can be used to detect clones (similar chunks of
+Description: cloneR can be used to detect clones (similar chunks of
              code).
 Depends: hash
 Imports: digest
