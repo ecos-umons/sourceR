@@ -13,6 +13,7 @@ VisitExpression <- function(e, FUNC, global=FALSE, assign.name=NA) {
     } else {
       args <- as.list(e)[2:length(e)]
       if (name == "{" & length(args) == 1) {
+        do.call(c, VisitExpressions(args, FUNC))
       } else {
         FUNC$Fcall(name=name, args=args,
                    res=lapply(args, VisitExpression, FUNC),
