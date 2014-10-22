@@ -1,6 +1,9 @@
 importFrom(digest, digest)
+import(hash)
+import(data.table)
 
 export(VisitExpressions)
 export(FindFunctions)
 export(ParsePackage)
 export(FindClones, FindClonesFromHashes)
+export(FunctionsHashToDataTable)

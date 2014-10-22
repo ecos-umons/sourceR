@@ -7,7 +7,7 @@ Author: Maëlick Claes <himself@maelick.net>
 Maintainer: Maëlick Claes <himself@maelick.net>
 Description: cloneR can be used to detect clones (similar chunks of
              code).
-Depends: hash
+Depends: hash, data.table
 Imports: digest
 License: GPL-3
 Encoding: UTF-8
