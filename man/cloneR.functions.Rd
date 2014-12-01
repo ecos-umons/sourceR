@@ -7,19 +7,15 @@
 }
 
 \usage{
-FindFunctions(expr, threshold=0, algo="sha1", use.hash=FALSE)
+FindFunctions(expr, algo="sha1")
 }
 \arguments{
   \item{expr}{R expression object.}
-  \item{threshold}{Minimum number of lines needed for the expression to
-    be extracted.}
   \item{algo}{Hash algorithm to use.}
-  \item{use.hash}{If TRUE returns a hash rather than a list.}
 }
 \details{
-  \code{FindFunctions} returns a list or a hash containing the
-  description of all functions found in \code{expr} with a minimum of
-  \code{threshold} lines.
+  \code{FindFunctions} returns a \code{data.table} containing the
+  description of all functions found in \code{expr}.
 }
 
 \author{

@@ -8,7 +8,7 @@ FunctionDescription <- function(hash, ref, name, args, body, is.global, size=NA)
              loc=length(strsplit(body, "\\n")[[1]]))
 }
 
-FindFunctions <- function(expr, threshold=0, algo="sha1") {
+FindFunctions <- function(expr, algo="sha1") {
   h <- hash()
   Ffunct <- function(args, body, ref, res, global, assign.name) {
     res <- sum(unlist(res)) + 1
