@@ -4,6 +4,5 @@ import(data.table)
 
 export(VisitExpressions)
 export(FindFunctions)
-export(ParsePackage)
+export(ParsePackage, ParseFile, ParseText)
 export(FindClones)
-export(FunctionsHashToDataTable)
