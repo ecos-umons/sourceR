@@ -12,6 +12,9 @@ ParseFile <- function(filename, guess.encoding=FALSE) {
   parse(filename, keep.source=TRUE, encoding=encoding)
 }
 
-ParseText <- function(text) {
-  parse(text=text, keep.source=FALSE)
+ParseText <- function(text, name=NULL) {
+  expr <- parse(text=text, keep.source=TRUE)
+  if (is.null(name)) attributes(expr)$srcfile <- srcfile(tempfile())
+  else attributes(expr)$srcfile <- srcfile(name)
+  expr
 }
