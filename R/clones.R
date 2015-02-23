@@ -1,14 +1,10 @@
-FindClonesFromHashes <- function(hashes) {
-  clones <- unlist(hashes)
-  ids <- lapply(names(hashes), function(x) rep(x, length(hashes[[x]])))
-  res <- split(unlist(ids), clones)
-  res[sapply(res, length) > 1]
-}
-
-FindClones <- function(exprs, threshold=0, algo="sha1") {
-  hashes <- lapply(exprs, FindFunctionsHash, threshold, algo)
-  if (is.null(names(hashes))) {
-    names(hashes) <- 1:length(hashes)
-  }
-  list(hashes=hashes, clones=FindClonesFromHashes(lapply(hashes, names)))
+FindClones <- function(exprs, algo="sha1") {
+  if (inherits(exprs, "list") && length(exprs) &&
+      all(sapply(exprs, inherits, "expression"))) {
+    res <- lapply(exprs, FindFunctions, algo)
+    hashes <- table(unlist(lapply(res, function(x) x[, unique(hash)])))
+    lapply(res, function(x) x[hash %in% names(hashes)[hashes > 1]])
+  } else if (inherits(exprs, "expression")) {
+    FindFunctions(exprs, algo)[, if (.N > 1) .SD, by="hash"]
+  } else stop("exprs must either be an expression or a list of expressions")
 }
