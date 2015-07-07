@@ -1,15 +1,15 @@
-\name{cloneR-package}
-\alias{cloneR-package}
-\alias{cloneR}
+\name{sourceR-package}
+\alias{sourceR-package}
+\alias{sourceR}
 \docType{package}
-\title{CRAN packages metadata extractor}
+\title{R code analysis tools}
 \description{
-  cloneR can be used to detect clones (similar chunks of code).
+  Static code analysis for R.
 }
 
 \details{
-  cloneR consist of functions to visit R expressions objects and find
-  functions similar functions in them.
+  cloneR consist of functions to visit R expressions objects to extract
+  informations such as duplicated functions or naming convention.
 }
 
 \author{
@@ -20,20 +20,5 @@ Maintainer: Maëlick Claes <himself@maelick.net>
 
 \keyword{clone}
 \keyword{code}
-\keyword{copypaste}
+\keyword{analysis}
 \keyword{detection}
-
-\examples{
-code <- "f1 <- function(x) x + 1
-f2 <- function(x, y) {
-  x + y
-}
-f3 <- function(x, y) {
-  function(x) x + y
-}
-f4 <- function(x) {
-  f <- function(y) y - 1
-  x * f(x) / 2
-}"
-clones <- FindClones(ParseText(code))
-}

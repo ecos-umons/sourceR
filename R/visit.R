@@ -1,30 +1,22 @@
-VisitExpression <- function(e, FUNC, global=FALSE, assign.name=NA) {
-  if (length(e) > 1) {
-    name <- e[[1]]
-    if (name == "function") {
-      body <- as.character(as.expression(e[[3]]))
-      FUNC$funct(args=e[[2]], body=body, ref=getSrcref(e[[4]]),
-                    res=VisitExpression(e[[3]], FUNC),
-                    global=global, assign.name=assign.name)
-    } else if (name == "<-" | name == "=") {
-      FUNC$assign(name=e[[2]], value=e[[3]],
-                  res=VisitExpression(e[[3]], FUNC, global, e[[2]]),
-                  global=global, assign.name=assign.name)
-    } else {
-      args <- as.list(e)[2:length(e)]
-      if (name == "{" & length(args) == 1) {
-        do.call(c, VisitExpressions(args, FUNC))
-      } else {
-        FUNC$call(name=name, args=args,
-                  res=lapply(args, VisitExpression, FUNC),
-                  global=global, assign.name=assign.name)
-      }
-    }
-  } else {
-    FUNC$leaf(value=e, global=global, assign.name=assign.name)
+VisitExpression <- function(e, Function, Assign, Call, Leaf,
+                            global=FALSE, assign.name=NA) {
+  Visit <- function(...) {
+    VisitExpression(Function=Function, Assign=Assign, Call=Call, Leaf=Leaf, ...)
   }
-}
-
-VisitExpressions <- function(expr, FUNC, global=FALSE, assign.name=NA) {
-  lapply(expr, VisitExpression, FUNC, global, assign.name)
+  if (length(e) <= 1) {
+    Leaf(value=e, global=global, assign.name=assign.name)
+  } else if (e[[1]] == "function") {
+    args.res <- lapply(names(e[[2]]), function(x) {
+      Visit(e[[2]][[x]], assign.name=x)
+    })
+    Function(args=e[[2]], args.res=args.res, body=e[[3]],
+             body.res=Visit(e[[3]]), ref=getSrcref(e[[4]]),
+             global=global, assign.name=assign.name)
+  } else if (e[[1]] == "<-" || e[[1]] == "=") {
+    Assign(name=e[[2]], value=e[[3]], res=Visit(e[[3]], global, e[[2]]),
+           global=global, assign.name=assign.name)
+  } else {
+    Call(name=e[[1]], args=args, res=lapply(as.list(e)[2:length(e)], Visit),
+         global=global, assign.name=assign.name)
+  }
 }

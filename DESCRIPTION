@@ -1,13 +1,11 @@
-Package: cloneR
+Package: sourceR
 Type: Package
-Title: R code clone detection
+Title: R code analysis tools
 Version: 1.0
-Date: 2013-08-21
 Author: Maëlick Claes <himself@maelick.net>
 Maintainer: Maëlick Claes <himself@maelick.net>
-Description: cloneR can be used to detect clones (similar chunks of
-             code).
+Description: Static code analysis for R.
 Depends: data.table
-Imports: hash, digest
+Imports: digest
 License: GPL-3
 Encoding: UTF-8

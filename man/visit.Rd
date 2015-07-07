@@ -1,17 +1,24 @@
-\name{VisitExpressions}
-\alias{VisitExpressions}
+\name{VisitExpression}
+\alias{VisitExpression}
 \encoding{UTF-8}
-\title{VisitExpressions}
+\title{VisitExpression}
 \description{
   Visit R expression objects.
 }
 
 \usage{
-VisitExpressions(expr, FUNC, global=FALSE, assign.name=NA)
+VisitExpression(e, Function, Assign, Call, Leaf, global=FALSE, assign.name=NA)
 }
 \arguments{
-  \item{expr}{Expression to visit.}
-  \item{FUNC}{List of functions to apply on AST nodes (see details).}
+  \item{e}{Expression to visit.}
+  \item{Function}{Function call when visiting a AST node that is a
+    function declaration.}
+  \item{Assign}{Function call when visiting a AST node that is a
+    assignation.}
+  \item{Call}{Function call when visiting a AST node that is a
+    function call.}
+  \item{Leaf}{Function call when visiting a AST node that is a
+    leaf (identifier or constant).}
   \item{global}{TRUE if this expression is at a global level}
   \item{assign.name}{Identifier name assigned to this expression.}
 }
@@ -19,22 +26,20 @@ VisitExpressions(expr, FUNC, global=FALSE, assign.name=NA)
   This function visit an expression by doing a depth-first walk of the
   abstract syntax tree represented by the expression object.
 
-  FUNC is a list of functions which are the followings:
-
-  \code{FUNC$Ffunc} is called on call to \code{function}. It takes as
+  \code{Function} is called on call to \code{function}. It takes as
   arguments \code{args} the list of argument of the function, the
   \code{body} of the function and \code{ref} which is a \code{srcref} of
   the function.
 
-  \code{FUNC$Fassign} is called on assignment. It takes as arguments the
+  \code{Assign} is called on assignment. It takes as arguments the
   \code{name} of the assigned identifier and \code{value} the value
   assigned.
 
-  \code{FUNC$Fcall} is called on function calls. It takes as arguments
+  \code{Call} is called on function calls. It takes as arguments
   the \code{name} of the function called and \code{args} the expressions
   of the passed arguments.
 
-  \code{FUNC$Fleaf} is called on the leafs of the AST (i.e. identifiers
+  \code{Leaf} is called on the leafs of the AST (i.e. identifiers
   and simple values like numeric and characters). It takes as arguments
   the \code{value} of the node.
 

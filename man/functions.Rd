@@ -7,11 +7,13 @@
 }
 
 \usage{
-FindFunctions(expr, algo="sha1")
+FindFunctions(expr, algo="sha1", as.data.table=TRUE, keep.code=TRUE)
 }
 \arguments{
   \item{expr}{R expression object.}
   \item{algo}{Hash algorithm to use.}
+  \item{as.data.table}{Converts result as a data.table if TRUE.}
+  \item{keep.code}{Keeps source code reference if TRUE.}
 }
 \details{
   \code{FindFunctions} returns a \code{data.table} containing the

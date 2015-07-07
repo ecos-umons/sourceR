@@ -1,27 +1,39 @@
-FunctionDescription <- function(hash, ref, name, args, body, is.global, size=NA) {
-  file <- get("filename", attr(ref, "srcfile"))
-  data.table(hash=hash, file=file,
-             begin.line=ref[1], begin.col=ref[2],
-             end.line=ref[3], end.col=ref[4],
-             name=as.character(name), args=list(args), body=body,
-             is.global=is.global, size=size,
-             loc=length(strsplit(body, "\\n")[[1]]))
-}
-
-FindFunctions <- function(expr, algo="sha1") {
-  h <- hash()
-  Ffunct <- function(args, body, ref, res, global, assign.name) {
-    res <- sum(unlist(res)) + 1
-    key <- digest(body)
-    func <- FunctionDescription(key, ref, assign.name, args, body, global, res)
-    h[[key]] <- c(h[[key]], list(func))
+FindFunctions <- function(expr, algo="sha1", as.data.table=TRUE,
+                          keep.code=TRUE) {
+  Function <- function(args.res, body, body.res, ref, global, assign.name, ...) {
+    size <- if (length(args.res)) sum(sapply(args.res, `[[`, "size")) else 0
+    size <- size + body.res$size + 1
+    hashes <- lapply(args.res, `[[`, "hash")
+    hash <- digest(c(list("function", body.res$hash), hashes))
+    file <- get("filename", attr(ref, "srcfile"))
+    code <- as.character(ref)
+    func <- list(hash=hash, body.hash=body.res$hash, name=as.character(assign.name),
+                 file=file, begin.line=ref[1], begin.col=ref[2],
+                 end.line=ref[3], end.col=ref[4], global=global,
+                 size=size, body.size=body.res$size, code=code,
+                 loc=length(ref), body.loc=length(body), sub.func=body.res$sub.func)
+    list(hash=hash, size=size, sub.func=list(func))
+  }
+  Assign <- function(name, res, ...) {
+    res$size <- res$size + 1
+    res$hash <- digest(list("assign", name, res$hash))
     res
   }
-  Fassign <- function(name, res, ...) res + 1
-  Fcall <- function(name, args, res, ...) sum(unlist(res)) + 1
-  Fleaf <- function(value, ...) 1
-  VisitExpressions(expr, list(funct=Ffunct, assign=Fassign,
-                              call=Fcall, leaf=Fleaf),
-                   global=TRUE)
-  rbindlist(unlist(as.list(h), recursive=FALSE))
+  Call <- function(name, args, res, ...) {
+    size <- sum(sapply(res, `[[`, "size")) + 1
+    hashes <- lapply(res, `[[`, "hash")
+    hash <- digest(c(list("call", name), hashes))
+    sub.func <- do.call(c, lapply(res, function(x) x$sub.func))
+    if (!is.null(sub.func)) {
+      list(size=size, hash=hash, sub.func=sub.func)
+    } else list(size=size, hash=hash)
+  }
+  Leaf <- function(value, ...) {
+    list(size=1, hash=digest(value))
+  }
+  res <- lapply(expr, lapply, VisitExpression, Function=Function,
+                Assign=Assign, Call=Call, Leaf=Leaf, global=TRUE)
+  if (as.data.table) {
+    FunctionAsDataTable(res, keep.code)
+  } else res
 }

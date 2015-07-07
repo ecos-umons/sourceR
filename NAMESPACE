@@ -1,8 +1,10 @@
 importFrom(digest, digest)
-import(hash)
 import(data.table)
 
-export(VisitExpressions)
+export(VisitExpression)
 export(FindFunctions)
 export(ParsePackage, ParseFile, ParseText)
 export(FindClones)
+export(CodingStyle)
+S3method(CodingStyle, package.code)
+S3method(CodingStyle, expression)

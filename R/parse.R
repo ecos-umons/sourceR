@@ -1,11 +1,16 @@
 ParsePackage <- function(package, guess.encoding=FALSE) {
   path <- file.path(package, "R")
-  files <- dir(path, full.names=TRUE, recursive=TRUE)
+  files <- dir(path, recursive=TRUE)
   src <- grep("\\.R$", files, ignore.case=TRUE, value=TRUE)
   if (length(src)) {
-    do.call(c, lapply(src, ParseFile))
+    res <- lapply(file.path(path, src), ParseFile)
+    names(res) <- file.path("R", src)
+    class(res) <- "package.code"
+    res
   }
 }
+
+package.code <- ParsePackage
 
 ParseFile <- function(filename, guess.encoding=FALSE) {
   encoding <- if (guess.encoding) GuessEncoding(filename) else "unknown"
