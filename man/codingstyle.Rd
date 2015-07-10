@@ -10,7 +10,7 @@
 }
 
 \usage{
-  CodingStyle(expr)
+  CodingStyle(expr, ...)
   \method{CodingStyle}{list}(expr)
   \method{CodingStyle}{expression}(expr)
   \method{CodingStyle}{package.code}(expr)
@@ -18,6 +18,7 @@
 \arguments{
   \item{expr}{A single R expression object or a list of R expression
     objects.}
+  \item{...}{Further arguments to pass to method implementation.}
 }
 \details{
   \code{CodingStyle.expression} returns a \code{data.table} containing

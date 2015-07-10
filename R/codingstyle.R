@@ -28,6 +28,6 @@ CodingStyle.package.code <- function(expr) {
 
 ## CodingStyle.list <- CodingStyle.package.code
 
-CodingStyle <- function(expr) {
+CodingStyle <- function(expr, ...) {
   UseMethod("CodingStyle", expr)
 }
