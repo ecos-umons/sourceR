@@ -39,7 +39,7 @@ FindFunctions <- function(expr, algo="sha1", as.data.table=TRUE,
     size <- if (length(args.res)) sum(sapply(args.res, `[[`, "size")) else 0
     size <- size + body.res$size + 1
     hashes <- lapply(args.res, `[[`, "hash")
-    hash <- digest(c(list("function", body.res$hash), hashes))
+    hash <- digest(c(list("function", body.res$hash), hashes), algo="sha1")
     file <- get("filename", attr(ref, "srcfile"))
     code <- as.character(ref)
     func <- list(hash=hash, body.hash=body.res$hash, name=as.character(assign.name),
@@ -51,7 +51,7 @@ FindFunctions <- function(expr, algo="sha1", as.data.table=TRUE,
   }
   Assign <- function(name, res, ...) {
     res$size <- res$size + 1
-    res$hash <- digest(list("assign", name, res$hash))
+    res$hash <- digest(list("assign", name, res$hash), algo="sha1")
     res
   }
   Call <- function(name, args, res, ...) {
@@ -59,7 +59,7 @@ FindFunctions <- function(expr, algo="sha1", as.data.table=TRUE,
     else {
       size <- sum(sapply(res, `[[`, "size")) + 1
       hashes <- lapply(res, `[[`, "hash")
-      hash <- digest(c(list("call", name), hashes))
+      hash <- digest(c(list("call", name), hashes), algo="sha1")
       sub.func <- do.call(c, lapply(res, function(x) x$sub.func))
       if (!is.null(sub.func)) {
         list(size=size, hash=hash, sub.func=sub.func)
@@ -67,7 +67,7 @@ FindFunctions <- function(expr, algo="sha1", as.data.table=TRUE,
     }
   }
   Leaf <- function(value, ...) {
-    list(size=1, hash=digest(value))
+    list(size=1, hash=digest(value, algo="sha1"))
   }
   res <- lapply(expr, lapply, VisitExpression, Function=Function,
                 Assign=Assign, Call=Call, Leaf=Leaf, global=TRUE)
