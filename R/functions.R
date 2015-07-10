@@ -34,7 +34,7 @@
 }
 
 FunctionDefinitions.expression <- function(expr, as.data.table=TRUE,
-                                           keep.code=TRUE) {
+                                           keep.code=TRUE, ...) {
   Function <- function(args.res, body, body.res, ref, global, assign.name, ...) {
     size <- if (length(args.res)) sum(sapply(args.res, `[[`, "size")) else 0
     size <- size + body.res$size + 1

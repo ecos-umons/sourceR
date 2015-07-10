@@ -1,4 +1,4 @@
-CodingStyle.expression <- function(expr) {
+CodingStyle.expression <- function(expr, ...) {
   Make <- function(assign.name, global, type) {
     assign.name <- as.character(assign.name)
     if (length(assign.name) == 1 && !is.na(assign.name)) {
@@ -22,7 +22,7 @@ CodingStyle.expression <- function(expr) {
                    Assign=Assign, Call=Call, Leaf=Leaf, global=TRUE))
 }
 
-CodingStyle.package.code <- function(expr) {
+CodingStyle.package.code <- function(expr, ...) {
   lapply(expr, CodingStyle.expression)
 }
 
