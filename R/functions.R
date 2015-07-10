@@ -1,3 +1,40 @@
+FunctionAsDataTable <- function(func, keep.code) {
+  res <- func[names(func) != "sub.func"]
+  if (keep.code) {
+    res$code <- do.call(paste, c(as.list(res$code), list(sep="\n")))
+  } else {
+    res <- res[names(res) != "code"]
+  }
+  res <- as.data.table(res)
+  if (length(func$sub.func)) {
+    sub <- lapply(func$sub.func, FunctionAsDataTable, keep.code)
+    rbind(res, rbindlist(sub))
+  } else res
+}
+
+Inclusions <- function(func) {
+  if (length(func$sub.func)) {
+    GetSub <- function(name) sapply(func$sub.func, function(f) f[[name]])
+    res <- data.table(file=func$file, parent.hash=func$hash,
+                      parent.begin.line=func$begin.line,
+                      parent.begin.col=func$begin.col,
+                      parent.end.line=func$end.line,
+                      parent.end.col=func$end.col,
+                      sub.hash=GetSub("hash"),
+                      sub.begin.line=GetSub("begin.line"),
+                      sub.begin.col=GetSub("begin.col"),
+                      sub.end.line=GetSub("end.line"),
+                      sub.end.col=GetSub("end.col"))
+    rbind(res, rbindlist(lapply(func$sub.func, Inclusions)))
+  }
+}
+
+FunctionsAsDataTable <- function(funcs, keep.code=TRUE) {
+  funcs <- unlist(lapply(funcs, function(f) f$sub.func), recursive=FALSE)
+  list(functions=rbindlist(lapply(funcs, FunctionAsDataTable, keep.code)),
+       inclusions=rbindlist(lapply(funcs, Inclusions)))
+}
+
 FindFunctions <- function(expr, algo="sha1", as.data.table=TRUE,
                           keep.code=TRUE) {
   Function <- function(args.res, body, body.res, ref, global, assign.name, ...) {
@@ -37,6 +74,6 @@ FindFunctions <- function(expr, algo="sha1", as.data.table=TRUE,
   res <- lapply(expr, lapply, VisitExpression, Function=Function,
                 Assign=Assign, Call=Call, Leaf=Leaf, global=TRUE)
   if (as.data.table) {
-    FunctionAsDataTable(res, keep.code)
+    FunctionsAsDataTable(res, keep.code)
   } else res
 }
