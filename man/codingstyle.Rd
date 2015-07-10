@@ -11,9 +11,8 @@
 
 \usage{
   CodingStyle(expr, ...)
-  \method{CodingStyle}{list}(expr)
-  \method{CodingStyle}{expression}(expr)
-  \method{CodingStyle}{package.code}(expr)
+  \method{CodingStyle}{expression}(expr, ...)
+  \method{CodingStyle}{package.code}(expr, ...)
 }
 \arguments{
   \item{expr}{A single R expression object or a list of R expression

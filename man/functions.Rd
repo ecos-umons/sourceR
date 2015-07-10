@@ -1,22 +1,28 @@
-\name{FindFunctions}
-\alias{FindFunctions}
+\name{FunctionDefinitions}
+\alias{FunctionDefinitions}
+\alias{FunctionDefinitions.expression}
+\alias{FunctionDefinitions.package.code}
 \encoding{UTF-8}
-\title{FindFunctions}
+\title{FunctionDefinitions}
 \description{
-  Find functions inside R expressions.
+  Find function definitions inside R expressions.
 }
 
 \usage{
-FindFunctions(expr, algo="sha1", as.data.table=TRUE, keep.code=TRUE)
+FunctionDefinitions(expr, ...)
+\method{FunctionDefinitions}{expression}(expr, as.data.table=TRUE,
+                                         keep.code=TRUE, ...)
+\method{FunctionDefinitions}{package.code}(expr, as.data.table=TRUE, ...)
 }
 \arguments{
   \item{expr}{R expression object.}
-  \item{algo}{Hash algorithm to use.}
   \item{as.data.table}{Converts result as a data.table if TRUE.}
-  \item{keep.code}{Keeps source code reference if TRUE.}
+  \item{keep.code}{If converting results as a data.table,kKeeps source
+    code reference if TRUE.}
+  \item{...}{Further arguments to pass to method implementation.}
 }
 \details{
-  \code{FindFunctions} returns a \code{data.table} containing the
+  Returns a list or \code{data.table} containing the
   description of all functions found in \code{expr}.
 }
 
