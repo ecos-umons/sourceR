@@ -26,8 +26,6 @@ CodingStyle.package.code <- function(expr) {
   lapply(expr, CodingStyle.expression)
 }
 
-## CodingStyle.list <- CodingStyle.package.code
-
 CodingStyle <- function(expr, ...) {
   UseMethod("CodingStyle", expr)
 }
