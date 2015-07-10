@@ -20,13 +20,16 @@ FindFunctions <- function(expr, algo="sha1", as.data.table=TRUE,
     res
   }
   Call <- function(name, args, res, ...) {
-    size <- sum(sapply(res, `[[`, "size")) + 1
-    hashes <- lapply(res, `[[`, "hash")
-    hash <- digest(c(list("call", name), hashes))
-    sub.func <- do.call(c, lapply(res, function(x) x$sub.func))
-    if (!is.null(sub.func)) {
-      list(size=size, hash=hash, sub.func=sub.func)
-    } else list(size=size, hash=hash)
+    if ((name == "(" || name == "{") && length(args) == 1) res[[1]]
+    else {
+      size <- sum(sapply(res, `[[`, "size")) + 1
+      hashes <- lapply(res, `[[`, "hash")
+      hash <- digest(c(list("call", name), hashes))
+      sub.func <- do.call(c, lapply(res, function(x) x$sub.func))
+      if (!is.null(sub.func)) {
+        list(size=size, hash=hash, sub.func=sub.func)
+      } else list(size=size, hash=hash)
+    }
   }
   Leaf <- function(value, ...) {
     list(size=1, hash=digest(value))
