@@ -57,7 +57,7 @@ FindFunctions <- function(expr, algo="sha1", as.data.table=TRUE,
     res
   }
   Call <- function(name, args, res, ...) {
-    if ((name == "(" || name == "{") && length(args) == 1) res[[1]]
+    if ((name == "(" || name == "{") && length(res) == 1) res[[1]]
     else {
       size <- sum(sapply(res, `[[`, "size")) + 1
       hashes <- lapply(res, `[[`, "hash")
