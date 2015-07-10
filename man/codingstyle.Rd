@@ -15,8 +15,8 @@
   \method{CodingStyle}{package.code}(expr, ...)
 }
 \arguments{
-  \item{expr}{A single R expression object or a list of R expression
-    objects.}
+  \item{expr}{A single R expression or package.code object, or a list of
+    R expression orpackage.code objects.}
   \item{...}{Further arguments to pass to method implementation.}
 }
 \details{
