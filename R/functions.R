@@ -87,3 +87,69 @@ FunctionDefinitions.package.code <- function(expr, as.data.table=TRUE, ...) {
 FunctionDefinitions <- function(expr, ...) {
   UseMethod("FunctionDefinitions", expr)
 }
+
+FunctionCalls.expression <- function(expr, ...) {
+  current.envir <- new.env(parent=emptyenv())
+  Function <- function(args, args.res, body.res, ref, global, assign.name, ...) {
+    old.envir <- current.envir
+    environment(Function)$current.envir <- new.env(parent=old.envir)
+    for (name in names(args)) {
+      current.envir[[as.character(name)]] <- TRUE
+    }
+    force(args.res)
+    force(body.res)
+    environment(Function)$current.envir <- old.envir
+    res <- rbind(rbindlist(args.res), body.res)
+    res[is.na(res$file)]$file <- get("filename", attr(ref, "srcfile"))
+    res[is.na(res$begin.line)]$begin.line <- ref[1]
+    res[is.na(res$begin.col)]$begin.col <- ref[2]
+    res[is.na(res$end.line)]$end.line <- ref[3]
+    res[is.na(res$end.col)]$end.col <- ref[4]
+    res
+  }
+  Assign <- function(name, res, ...) {
+    if (inherits(name, "name")) {
+      current.envir[[as.character(name)]] <- TRUE
+    }
+    res
+  }
+  CreateTable <- function(name, package, public) {
+    data.table(name, package, public, file=NA_character_,
+               begin.line=NA_integer_, begin.col=NA_integer_,
+               end.line=NA_integer_, end.col=NA_integer_)
+  }
+  Call <- function(name, res, ...) {
+    this <-
+      if (inherits(name, "call")) {
+        if (name[[1]] == "::") {
+          CreateTable(name=as.character(name[[3]]),
+                      package=as.character(name[[2]]), public=TRUE)
+        } else if (name[[1]] == ":::") {
+          CreateTable(name=as.character(name[[3]]),
+                      package=as.character(name[[2]]), public=FALSE)
+        }
+      } else if (inherits(name, "name") && !exists(as.character(name),
+                                                   envir=current.envir)) {
+        CreateTable(name=as.character(name), package=NA, public=TRUE)
+      }
+    rbind(this, rbindlist(res))
+  }
+  Leaf <- function(value, ...) {
+    NULL
+  }
+  rbindlist(lapply(expr, VisitExpression, Function=Function,
+                   Assign=Assign, Call=Call, Leaf=Leaf, global=TRUE))
+}
+
+FunctionCalls.package.code <- function(expr, ...) {
+  res <- lapply(expr, FunctionCalls.expression, ...)
+  rbindlist(lapply(names(expr), function(f) {
+    calls <- res[[f]]
+    calls[is.na(calls$file), file := f]
+    calls
+  }))
+}
+
+FunctionCalls <- function(expr, ...) {
+  UseMethod("FunctionCalls", expr)
+}
