@@ -33,8 +33,8 @@
        inclusions=rbindlist(lapply(funcs, Inclusions)))
 }
 
-FindFunctions <- function(expr, algo="sha1", as.data.table=TRUE,
-                          keep.code=TRUE) {
+FunctionDefinitions.expression <- function(expr, as.data.table=TRUE,
+                                           keep.code=TRUE) {
   Function <- function(args.res, body, body.res, ref, global, assign.name, ...) {
     size <- if (length(args.res)) sum(sapply(args.res, `[[`, "size")) else 0
     size <- size + body.res$size + 1
@@ -69,9 +69,21 @@ FindFunctions <- function(expr, algo="sha1", as.data.table=TRUE,
   Leaf <- function(value, ...) {
     list(size=1, hash=digest(value, algo="sha1"))
   }
-  res <- lapply(expr, lapply, VisitExpression, Function=Function,
+  res <- lapply(expr, VisitExpression, Function=Function,
                 Assign=Assign, Call=Call, Leaf=Leaf, global=TRUE)
   if (as.data.table) {
-    FunctionsAsDataTable(res, keep.code)
+    .AsDataTable(res, keep.code)
   } else res
+}
+
+FunctionDefinitions.package.code <- function(expr, as.data.table=TRUE, ...) {
+  res <- lapply(expr, FunctionDefinitions.expression, as.data.table, ...)
+  if (as.data.table) {
+    list(functions=rbindlist(lapply(res, function(x) x$functions)),
+         inclusions=rbindlist(lapply(res, function(x) x$inclusions)))
+  } else res
+}
+
+FunctionDefinitions <- function(expr, ...) {
+  UseMethod("FunctionDefinitions", expr)
 }
