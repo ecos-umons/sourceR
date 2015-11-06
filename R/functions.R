@@ -42,7 +42,7 @@ FunctionDefinitions.expression <- function(expr, as.data.table=TRUE,
     hash <- digest(c(list("function", body.res$hash), hashes), algo="sha1")
     file <- get("filename", attr(ref, "srcfile"))
     code <- as.character(ref)
-    func <- list(hash=hash, body.hash=body.res$hash, name=as.character(assign.name),
+    func <- list(hash=hash, body.hash=body.res$hash, name=deparse(assign.name),
                  file=file, begin.line=ref[1], begin.col=ref[2],
                  end.line=ref[3], end.col=ref[4], global=global,
                  size=size, body.size=body.res$size, code=code,
@@ -94,22 +94,24 @@ FunctionCalls.expression <- function(expr, ...) {
     old.envir <- current.envir
     environment(Function)$current.envir <- new.env(parent=old.envir)
     for (name in names(args)) {
-      current.envir[[as.character(name)]] <- TRUE
+      current.envir[[deparse(name)]] <- TRUE
     }
     force(args.res)
     force(body.res)
     environment(Function)$current.envir <- old.envir
     res <- rbind(rbindlist(args.res), body.res)
-    res[is.na(res$file)]$file <- get("filename", attr(ref, "srcfile"))
-    res[is.na(res$begin.line)]$begin.line <- ref[1]
-    res[is.na(res$begin.col)]$begin.col <- ref[2]
-    res[is.na(res$end.line)]$end.line <- ref[3]
-    res[is.na(res$end.col)]$end.col <- ref[4]
+    if (!is.null(res) && any(is.na(res$file))) {
+      res[is.na(res$file)]$file <- get("filename", attr(ref, "srcfile"))
+      res[is.na(res$begin.line)]$begin.line <- ref[1]
+      res[is.na(res$begin.col)]$begin.col <- ref[2]
+      res[is.na(res$end.line)]$end.line <- ref[3]
+      res[is.na(res$end.col)]$end.col <- ref[4]
+    }
     res
   }
   Assign <- function(name, res, ...) {
     if (inherits(name, "name")) {
-      current.envir[[as.character(name)]] <- TRUE
+      current.envir[[deparse(name)]] <- TRUE
     }
     res
   }
@@ -122,16 +124,17 @@ FunctionCalls.expression <- function(expr, ...) {
     this <-
       if (inherits(name, "call")) {
         if (name[[1]] == "::") {
-          CreateTable(name=as.character(name[[3]]),
-                      package=as.character(name[[2]]), public=TRUE)
+          CreateTable(name=deparse(name[[3]]),
+                      package=deparse(name[[2]]), public=TRUE)
         } else if (name[[1]] == ":::") {
-          CreateTable(name=as.character(name[[3]]),
-                      package=as.character(name[[2]]), public=FALSE)
+          CreateTable(name=deparse(name[[3]]),
+                      package=deparse(name[[2]]), public=FALSE)
         }
-      } else if (inherits(name, "name") && !exists(as.character(name),
-                                                   envir=current.envir)) {
-        CreateTable(name=as.character(name), package=NA, public=TRUE)
+      } else if (inherits(name, "name") &&
+                 !exists(deparse(name), envir=current.envir)) {
+        CreateTable(name=deparse(name), package=NA, public=TRUE)
       }
+    this$args <- list(names(args))
     rbind(this, rbindlist(res))
   }
   Leaf <- function(value, ...) {
@@ -145,7 +148,9 @@ FunctionCalls.package.code <- function(expr, ...) {
   res <- lapply(expr, FunctionCalls.expression, ...)
   rbindlist(lapply(names(expr), function(f) {
     calls <- res[[f]]
-    calls[is.na(calls$file), file := f]
+    if (!is.null(calls) && any(is.na(calls$file))) {
+      calls[is.na(calls$file), file := f]
+    }
     calls
   }))
 }
