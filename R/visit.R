@@ -16,7 +16,7 @@ VisitExpression <- function(e, Function, Assign, Call, Leaf,
     Assign(name=e[[2]], value=e[[3]], res=Visit(e[[3]], global, e[[2]]),
            global=global, assign.name=assign.name)
   } else {
-    Call(name=e[[1]], args=args, res=lapply(as.list(e)[2:length(e)], Visit),
+    Call(name=e[[1]], args=e[-1], res=lapply(as.list(e)[2:length(e)], Visit),
          global=global, assign.name=assign.name)
   }
 }
