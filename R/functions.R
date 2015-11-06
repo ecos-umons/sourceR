@@ -100,7 +100,7 @@ FunctionCalls.expression <- function(expr, ...) {
     force(body.res)
     environment(Function)$current.envir <- old.envir
     res <- rbind(rbindlist(args.res), body.res)
-    if (!is.null(res) && any(is.na(res$file))) {
+    if (!is.null(res) && !is.null(res$file) && any(is.na(res$file))) {
       res[is.na(res$file)]$file <- get("filename", attr(ref, "srcfile"))
       res[is.na(res$begin.line)]$begin.line <- ref[1]
       res[is.na(res$begin.col)]$begin.col <- ref[2]
