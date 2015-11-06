@@ -88,7 +88,11 @@ FunctionDefinitions <- function(expr, ...) {
   UseMethod("FunctionDefinitions", expr)
 }
 
-FunctionCalls.expression <- function(expr, ...) {
+common.calls <- c("[", "{", "(", "[[", ":", "::", ":::",
+                  "if", "for", "while", "return", "$", "-", "*", "+", "/", "!",
+                  "==", "!=", "^", "<", "<=", ">", ">=", "&&", "||", "&", "|")
+
+FunctionCalls.expression <- function(expr, ignore.common=TRUE, ...) {
   current.envir <- new.env(parent=emptyenv())
   Function <- function(args, args.res, body.res, ref, global, assign.name, ...) {
     old.envir <- current.envir
@@ -132,7 +136,8 @@ FunctionCalls.expression <- function(expr, ...) {
                       args=names(args), public=FALSE)
         }
       } else if (inherits(name, "name") &&
-                 !exists(deparse(name), envir=current.envir)) {
+                 !exists(deparse(name), envir=current.envir) &&
+                 !(ignore.common && deparse(name) %in% common.calls)) {
         CreateTable(name=deparse(name), package=NA,
                     args=names(args), public=TRUE)
       }
@@ -145,8 +150,8 @@ FunctionCalls.expression <- function(expr, ...) {
                    Assign=Assign, Call=Call, Leaf=Leaf, global=TRUE))
 }
 
-FunctionCalls.package.code <- function(expr, ...) {
-  res <- lapply(expr, FunctionCalls.expression, ...)
+FunctionCalls.package.code <- function(expr, ignore.common=TRUE, ...) {
+  res <- lapply(expr, FunctionCalls.expression, ignore.common, ...)
   rbindlist(lapply(names(expr), function(f) {
     calls <- res[[f]]
     if (!is.null(calls) && any(is.na(calls$file))) {
@@ -156,6 +161,6 @@ FunctionCalls.package.code <- function(expr, ...) {
   }))
 }
 
-FunctionCalls <- function(expr, ...) {
+FunctionCalls <- function(expr, ignore.common=TRUE, ...) {
   UseMethod("FunctionCalls", expr)
 }

@@ -16,14 +16,16 @@ FunctionDefinitions(expr, ...)
 \method{FunctionDefinitions}{expression}(expr, as.data.table=TRUE,
                                          keep.code=TRUE, ...)
 \method{FunctionDefinitions}{package.code}(expr, as.data.table=TRUE, ...)
-\method{FunctionCalls}{expression}(expr, ...)
-\method{FunctionCalls}{package.code}(expr, ...)
+\method{FunctionCalls}{expression}(expr, ignore.common=TRUE, ...)
+\method{FunctionCalls}{package.code}(expr, ignore.common=TRUE, ...)
 }
 \arguments{
   \item{expr}{R expression object.}
   \item{as.data.table}{Converts result as a data.table if TRUE.}
   \item{keep.code}{If converting results as a data.table,kKeeps source
     code reference if TRUE.}
+  \item{ignore.common}{If TRUE ignores common function calls like
+    \code{`(`}, \code{`\{`}, \code{`$`}, \code{if}, \code{`+`}, etc.}
   \item{...}{Further arguments to pass to method implementation.}
 }
 \details{
