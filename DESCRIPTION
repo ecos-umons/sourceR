@@ -7,5 +7,6 @@ Maintainer: Maëlick Claes <himself@maelick.net>
 Description: Static code analysis for R.
 Depends: data.table
 Imports: digest
+Suggests: testthat
 License: GPL-3
 Encoding: UTF-8
