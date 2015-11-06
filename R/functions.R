@@ -115,26 +115,27 @@ FunctionCalls.expression <- function(expr, ...) {
     }
     res
   }
-  CreateTable <- function(name, package, public) {
-    data.table(name, package, public, file=NA_character_,
+  CreateTable <- function(name, package, public, args=c()) {
+    if (is.null(args)) args <- character(0)
+    data.table(name, package, public, args=list(args), file=NA_character_,
                begin.line=NA_integer_, begin.col=NA_integer_,
                end.line=NA_integer_, end.col=NA_integer_)
   }
-  Call <- function(name, res, ...) {
+  Call <- function(name, args, res, ...) {
     this <-
       if (inherits(name, "call")) {
         if (name[[1]] == "::") {
-          CreateTable(name=deparse(name[[3]]),
-                      package=deparse(name[[2]]), public=TRUE)
+          CreateTable(name=deparse(name[[3]]), package=deparse(name[[2]]),
+                      args=names(args), public=TRUE)
         } else if (name[[1]] == ":::") {
-          CreateTable(name=deparse(name[[3]]),
-                      package=deparse(name[[2]]), public=FALSE)
+          CreateTable(name=deparse(name[[3]]), package=deparse(name[[2]]),
+                      args=names(args), public=FALSE)
         }
       } else if (inherits(name, "name") &&
                  !exists(deparse(name), envir=current.envir)) {
-        CreateTable(name=deparse(name), package=NA, public=TRUE)
+        CreateTable(name=deparse(name), package=NA,
+                    args=names(args), public=TRUE)
       }
-    this$args <- list(names(args))
     rbind(this, rbindlist(res))
   }
   Leaf <- function(value, ...) {
