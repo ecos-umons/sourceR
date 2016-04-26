@@ -10,7 +10,7 @@
 }
 
 \usage{
-  ParsePackage(package, guess.encoding=FALSE)
+  ParsePackage(package, guess.encoding=FALSE, recursive=FALSE)
   ParseFile(filename, guess.encoding=FALSE)
   ParseText(text, name=NULL)
 }
@@ -18,6 +18,8 @@
   \item{package}{Root directory of the source package.}
   \item{guess.encoding}{If TRUE try to guess file encoding. This might
     be useless and will drastically slow down the execution.}
+  \item{recursive}{If TRUE also parse code found in subdirectories of
+    package directory "R"}
   \item{filename}{Name of the file to parse.}
   \item{text}{Character vector to parse.}
   \item{name}{Name to give "srcfile" attribute of the parsed expression.}

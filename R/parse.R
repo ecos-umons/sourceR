@@ -1,6 +1,6 @@
-ParsePackage <- function(package, guess.encoding=FALSE) {
+ParsePackage <- function(package, guess.encoding=FALSE, recursive=FALSE) {
   path <- file.path(package, "R")
-  files <- dir(path, recursive=TRUE)
+  files <- dir(path, recursive=recursive)
   src <- grep("\\.R$", files, ignore.case=TRUE, value=TRUE)
   if (length(src)) {
     res <- lapply(file.path(path, src), ParseFile)
