@@ -19,7 +19,7 @@ FunctionDefinitions(expr, ...)
 \method{FunctionDefinitions}{expression}(expr, as.data.table=TRUE,
                                          keep.code=TRUE, ...)
 \method{FunctionDefinitions}{package.code}(expr, as.data.table=TRUE, ...)
-FunctionCalls(expr, ...)
+FunctionCalls(expr, ignore.common=TRUE, ...)
 \method{FunctionCalls}{expression}(expr, ignore.common=TRUE, ...)
 \method{FunctionCalls}{package.code}(expr, ignore.common=TRUE, ...)
 Globals(expr, ...)
