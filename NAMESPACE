@@ -1,4 +1,5 @@
 importFrom(digest, digest)
+importFrom(utils, getSrcref)
 import(data.table)
 
 export(ParsePackage, ParseFile, ParseText)
