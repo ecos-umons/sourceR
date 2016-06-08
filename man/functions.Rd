@@ -5,6 +5,9 @@
 \alias{FunctionCalls}
 \alias{FunctionCalls.expression}
 \alias{FunctionCalls.package.code}
+\alias{Globals}
+\alias{Globals.expression}
+\alias{Globals.package.code}
 \encoding{UTF-8}
 \title{FunctionDefinitions}
 \description{
@@ -16,8 +19,12 @@ FunctionDefinitions(expr, ...)
 \method{FunctionDefinitions}{expression}(expr, as.data.table=TRUE,
                                          keep.code=TRUE, ...)
 \method{FunctionDefinitions}{package.code}(expr, as.data.table=TRUE, ...)
+FunctionCalls(expr, ...)
 \method{FunctionCalls}{expression}(expr, ignore.common=TRUE, ...)
 \method{FunctionCalls}{package.code}(expr, ignore.common=TRUE, ...)
+Globals(expr, ...)
+\method{Globals}{expression}(expr, ...)
+\method{Globals}{package.code}(expr, ...)
 }
 \arguments{
   \item{expr}{R expression object.}
@@ -31,6 +38,9 @@ FunctionDefinitions(expr, ...)
 \details{
   \code{FunctionDefinitions} returns a list or \code{data.table}
   containing the description of all functions found in \code{expr}.
+  \code{FunctionCalls} returns a \code{data.table} with all calls found
+  in \code{expr} and \code{Globals} a \code{data.table} listing all
+  globals variables defined.
 }
 
 \author{
