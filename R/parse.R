@@ -1,7 +1,7 @@
 ParsePackage <- function(package, guess.encoding=FALSE, recursive=FALSE) {
   path <- file.path(package, "R")
   files <- dir(path, recursive=recursive)
-  src <- grep("\\.R$", files, ignore.case=TRUE, value=TRUE)
+  src <- grep("^[a-zA-Z0-9].*\\.[RrSsq]$", files, value=TRUE)
   if (length(src)) {
     res <- lapply(file.path(path, src), ParseFile)
     names(res) <- file.path("R", src)
