@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.org/ecos-umons/sourceR.svg?branch=master)](https://travis-ci.org/ecos-umons/sourceR)
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/ecos-umons/sourceR/workflows/R-CMD-check/badge.svg)](https://github.com/ecos-umons/sourceR/actions)
+<!-- badges: end -->
 
 sourceR
 =======
